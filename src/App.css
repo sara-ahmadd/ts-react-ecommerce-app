@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* {
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* .arrow {
+  position: absolute;
+  top: 50%;
+  font-size: 25px;
+  padding: 10px;
+  background-color: rgb(49, 108, 235);
+  z-index: 33;
+  color: white;
+  width: 100px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+} */
+
+.small-container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.container-box {
+  width: 100%;
+  position: relative;
+}
+
+
+@media (max-width: 768px) {
+  .container-box {
+    width: 100vw;
+  }
+  .small-container {
+    width: 100%;
+  }
+}
