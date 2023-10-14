@@ -8,7 +8,7 @@ type ProductType = {
 
 const ProductCard = ({ imgUrl, name, price }: ProductType) => {
   return (
-    <div className="flex flex-col w-96 border-2 rounded-lg h-full justify-center items-center">
+    <div className="flex flex-col w-96 border-2 rounded-lg h-full justify-center items-center p-0">
       <div className=" h-60 w-60">
         <img src={imgUrl} className="max-h-full max-w-full object-fill" />
       </div>

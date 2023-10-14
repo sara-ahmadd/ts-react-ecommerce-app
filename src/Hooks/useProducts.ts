@@ -6,21 +6,21 @@ interface Product {
   image: string;
   price: number;
 }
-type useProductsType = () => {
+type useProductsType = (s: string) => {
   data: Product[] | null;
   setData: React.Dispatch<React.SetStateAction<null>>;
 };
 
-export const useProducts: useProductsType = () => {
+export const useProducts: useProductsType = (category: string = "") => {
   const [data, setData] = useState(null);
   useEffect(() => {
     axios({
       method: "GET",
       baseURL: "https://fakestoreapi.com/",
-      url: "/products",
+      url: `/products${category}`,
     }).then((res) => {
       setData(res.data);
     });
-  }, []);
+  }, [category]);
   return { data, setData };
 };

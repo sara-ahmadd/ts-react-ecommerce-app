@@ -9,7 +9,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { useProducts } from "../Hooks/useProducts";
-import { ReactElement } from "react";
+import { ReactElement, useContext } from "react";
 import ProductCard from "./ProductCard";
 import {
   A11y,
@@ -18,26 +18,26 @@ import {
   Pagination,
   Scrollbar,
 } from "swiper/modules";
+import { CategoryContext } from "../context/CategoryContext";
 
 const ProductsSlider = () => {
-  const { data } = useProducts();
-
+  const { category } = useContext(CategoryContext);
+  const { data } = useProducts(category);
   return (
-    <div className="container-box">
-      <div className="small-container">
+    <div className="container-box p-0">
+      <div className="small-container p-0">
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y, EffectFade]}
           slidesPerView={3}
           spaceBetween={10}
           navigation
-          className=" flex justify-center items-center"
         >
           <>
             {data?.map((item, index): ReactElement => {
               return (
                 <SwiperSlide
                   key={`${item.id ?? index}`}
-                  className="w-full flex justify-center h-full items-center"
+                  className="w-full flex justify-center h-full items-center pt-0"
                 >
                   <ProductCard
                     imgUrl={item.image}
