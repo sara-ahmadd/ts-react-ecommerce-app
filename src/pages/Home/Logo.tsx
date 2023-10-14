@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Logo = () => {
-  return <div>Logo</div>;
+  const navigate = useNavigate();
+  return <button onClick={() => navigate("/")}>Logo</button>;
 };
 
 export default Logo;

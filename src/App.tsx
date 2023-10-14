@@ -5,11 +5,13 @@ import Login from "./pages/Login/Login";
 import Cart from "./pages/cart/Cart";
 import { CategoryContext } from "./context/CategoryContext";
 import { useState } from "react";
+import Navbar from "./pages/Home/Navbar";
 
 function App() {
   const [category, setCategory] = useState("");
   return (
     <CategoryContext.Provider value={{ category, setCategory }}>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
