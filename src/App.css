@@ -6,6 +6,24 @@
   padding: 20px;
   box-sizing: border-box;
 }
+#root {
+  position: relative;
+  padding: 0;
+}
+.modal {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 0;
+  background-color: rgba(146, 217, 252, 0.5);
+  width: 1200px;
+  height: 600px;
+  z-index: 555;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 
 .btn {
   background-color: rgb(14 165 233);

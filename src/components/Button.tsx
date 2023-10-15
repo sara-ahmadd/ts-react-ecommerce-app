@@ -1,7 +1,7 @@
 const Button = ({ action, text }: { action: () => void; text: string }) => {
   return (
     <button
-      className="border-2 rounded-md min-h-14 min-w-16 max-w-lg p-4 text-white btn"
+      className="border-2 rounded-md w-52 p-4 text-white btn mb-2"
       onClick={action}
     >
       {text}

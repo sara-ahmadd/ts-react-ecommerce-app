@@ -8,7 +8,7 @@ const Category = ({ title }: { title: string }) => {
     setCategory(`/category/${title}`);
   };
 
-  return <Button text={title} action={handleClick} />;
+  return <Button text={title.toUpperCase()} action={handleClick} />;
 };
 
 export default Category;

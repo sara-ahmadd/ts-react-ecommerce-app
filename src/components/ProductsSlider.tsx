@@ -19,6 +19,7 @@ import {
   Scrollbar,
 } from "swiper/modules";
 import { CategoryContext } from "../context/CategoryContext";
+// import ProductDetails from "./ProductDetails";
 
 const ProductsSlider = () => {
   const { category } = useContext(CategoryContext);
@@ -37,18 +38,22 @@ const ProductsSlider = () => {
               return (
                 <SwiperSlide
                   key={`${item.id ?? index}`}
-                  className="w-full flex justify-center h-full items-center pt-0"
+                  className="w-full flex justify-center h-max items-center pt-0"
                 >
                   <ProductCard
                     imgUrl={item.image}
                     name={item.title}
                     price={item.price}
+                    rate={item.rating.rate}
+                    count={item.rating.count}
+                    id={item.id}
                   />
                 </SwiperSlide>
               );
             })}
           </>
         </Swiper>
+        {/* <ProductDetails id={id} /> */}
       </div>
     </div>
   );
