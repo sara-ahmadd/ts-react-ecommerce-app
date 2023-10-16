@@ -3,6 +3,6 @@ import { User } from "../context/UserContext";
 export const useGetUser = (id: string) => {
   const data: string = localStorage.getItem("UsersDatabase") ?? "";
   const usersArray: User[] = data ? JSON.parse(data) : [];
-  const user = usersArray.filter((x) => x.id === id);
+  const user = usersArray.filter((x) => x.id === id)[0];
   return user;
 };

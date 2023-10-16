@@ -1,21 +1,17 @@
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import signUp from "/sign-up.svg";
+import { UserContext } from "../../context/UserContext";
 import { UsersDatabaseContext } from "../../context/UsersDatabaseContext";
 import { useNavigate } from "react-router-dom";
-// import { useUserReducerHook } from "./../../Hooks/useUserReducerHook";
-import { UserContext } from "../../context/UserContext";
-import { usersDatabase } from "../../helper/usersDataBase";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const { user, updateUser } = useContext(UserContext);
+  const { users, UpdateUsersDB } = useContext(UsersDatabaseContext);
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
-  const { users, setUsers } = useContext(UsersDatabaseContext);
-
-  //   const { user, setUser } = useUserReducerHook(form);
-  const { user, setUser } = useContext(UserContext);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({
       ...form,
@@ -23,21 +19,27 @@ const SignUp = () => {
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (form.email !== "" && form.password !== "") {
-      setUser(form);
-      setUsers([...users, user]);
-      usersDatabase(users);
-    }
+    updateUser(form);
+    UpdateUsersDB(form);
     navigate("/login");
   };
+
+  //update the users-database saved in the local storage with every new sign up
+  useEffect(() => {
+    if (user.email !== "" && user.password !== "") {
+      localStorage.setItem("UsersDatabase", JSON.stringify(users));
+    }
+  }, [user, users]);
 
   return (
     <div className="flex flex-row w-full h-max gap-5 items-center p-0">
       <form
         className="flex flex-col justify-start items-start gap-3 border-2 border-gray-200 rounded-md w-2/4 h-fit"
-        onSubmit={handleSubmit}
+        onSubmit={(e: FormEvent) => {
+          handleSubmit(e);
+        }}
       >
         <label htmlFor="email" className="p-0 pb-1">
           Email
@@ -70,7 +72,7 @@ const SignUp = () => {
         />
       </form>
       <div className=" w-1/2 h-3/4 p-0">
-        <img src={signUp} className=" w-full h-full p-0 object-contain" />
+        <img src={signUp} className=" w-4/5 h-4/5 p-0 object-contain" />
       </div>
     </div>
   );
