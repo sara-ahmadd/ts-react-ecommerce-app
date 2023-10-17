@@ -16,9 +16,17 @@ const Cart = () => {
 
   return (
     <div>
-      {cart?.map((x, index) => (
-        <h1 key={`${index}-${x.id}`}>{x.title}</h1>
-      ))}
+      {cart?.length > 0 ? (
+        cart.map((x, index) => (
+          <>
+            <h1 key={`${index}-${x.id}`}>{x.title}</h1>
+            <h2>Quantity : {x.amount}</h2>
+            <hr />
+          </>
+        ))
+      ) : (
+        <h1>Your cart is empty</h1>
+      )}
     </div>
   );
 };

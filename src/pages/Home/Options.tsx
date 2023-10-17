@@ -11,6 +11,7 @@ const Options = () => {
     updateUser({ email: "", password: "", cart: [] });
     updateCart([]);
   };
+
   return (
     <div className="flex gap-4 max-w-sm cursor-pointer">
       <button onClick={() => navigate("/login")}>
@@ -24,7 +25,9 @@ const Options = () => {
       <button onClick={() => navigate("/signUp")}>
         {user && user.email ? "" : "Sign Up"}
       </button>
-      <button onClick={() => navigate("/cart")}>Cart</button>
+      <button onClick={() => navigate("/cart")}>
+        Cart - {user.cart?.length ?? 0}
+      </button>
     </div>
   );
 };

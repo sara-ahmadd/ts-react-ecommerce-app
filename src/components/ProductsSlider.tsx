@@ -37,29 +37,29 @@ const ProductsSlider = () => {
     const prod = arr.find((x) => x.id === p.id);
     return prod ? prod : null;
   };
-  const updateUserCart = (user: User, product: Product) => {
+
+  const updateUserCart = (user: User, pr: Product) => {
     if (user.email && user.password) {
       if (user.cart !== undefined) {
+        //get the cart of the current user, then check if the clicked product is already in the cart.
         let retreivedCart = getSavedCart(currUser);
+        const checkedProduct = checkProduct(pr, retreivedCart);
+        //if the product is found in the cart
+        if (checkProduct !== null) {
+          //delete the product from the cart, then update the amount in the found product
+          retreivedCart = retreivedCart.filter((x) => x.id !== pr.id);
+          const quantity = checkedProduct?.amount ?? 0;
 
-        if (checkProduct(product, retreivedCart) !== null) {
-          console.log("amount", product.amount, product);
-
-          retreivedCart = retreivedCart.filter((x) => x.id !== product.id);
-          const quantity = product.amount ?? 0;
+          //add the updated product to the cart
           const updatedCart = [
             ...retreivedCart,
-            { ...product, amount: quantity + 1 },
+            { ...pr, amount: quantity + 1 },
           ];
-
           const updatedUser = { ...user, cart: updatedCart };
           updateUser(updatedUser);
           UpdateUsersDB(updatedUser);
         } else {
-          console.log(checkProduct(product, retreivedCart));
-
-          const updatedCart = [...retreivedCart, { ...product, amount: 1 }];
-
+          const updatedCart = [...retreivedCart, { ...pr, amount: 1 }];
           const updatedUser = { ...user, cart: updatedCart };
           updateUser(updatedUser);
           UpdateUsersDB(updatedUser);
