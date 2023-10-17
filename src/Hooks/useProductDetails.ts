@@ -1,13 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-export interface Product {
-  id: string;
-  title: string;
-  image: string;
-  price: number;
-  rating: { rate: number; count: number };
-  description: string;
-}
+import {Product} from './useProducts'
 type useProductsType = (s: string) => {
   data: Product | null;
   setData: React.Dispatch<React.SetStateAction<null>>;

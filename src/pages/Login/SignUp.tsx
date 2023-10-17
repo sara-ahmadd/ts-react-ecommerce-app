@@ -1,12 +1,12 @@
 import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
 import signUp from "/sign-up.svg";
-import { UserContext } from "../../context/UserContext";
 import { UsersDatabaseContext } from "../../context/UsersDatabaseContext";
 import { useNavigate } from "react-router-dom";
+import { useCheckUser } from "../../Hooks/useCheckUser";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { user, updateUser } = useContext(UserContext);
   const { users, UpdateUsersDB } = useContext(UsersDatabaseContext);
   const [form, setForm] = useState({
     email: "",
@@ -19,19 +19,30 @@ const SignUp = () => {
     });
   };
 
+  const checkUser = useCheckUser(form.email, form.password);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    updateUser(form);
-    UpdateUsersDB(form);
-    navigate("/login");
+    if (checkUser !== null) {
+      Swal.fire({
+        title: "Warning",
+        text: "The user already exists!",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+      navigate("/login");
+    } else {
+      UpdateUsersDB({ ...form, cart: [] });
+    }
   };
 
   //update the users-database saved in the local storage with every new sign up
   useEffect(() => {
-    if (user.email !== "" && user.password !== "") {
+    if (form.email !== "" && form.password !== "") {
       localStorage.setItem("UsersDatabase", JSON.stringify(users));
+      navigate("/login");
     }
-  }, [user, users]);
+  }, [users, navigate]);
 
   return (
     <div className="flex flex-row w-full h-max gap-5 items-center p-0">

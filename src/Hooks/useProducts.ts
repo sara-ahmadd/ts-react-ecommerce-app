@@ -1,14 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-interface Product {
+export interface Product {
   id: string;
   title: string;
   image: string;
   price: number;
   rating: { rate: number; count: number };
+  description?: string;
+  amount?: number;
 }
 type useProductsType = (s: string) => {
-  data: Product[] | null
+  data: Product[] | null;
   setData: React.Dispatch<React.SetStateAction<null>>;
 };
 

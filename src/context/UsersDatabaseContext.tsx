@@ -1,6 +1,7 @@
 import { ReactElement, createContext, useState } from "react";
 import { User } from "./UserContext";
 import { useGetUsers } from "../Hooks/useGetUsers";
+import { useCheckUser } from "../Hooks/useCheckUser";
 
 export type Users = User[];
 
@@ -22,27 +23,36 @@ const InitUsersState: UserContextType = {
 
 export const UsersDatabaseContext = createContext(InitUsersState);
 
-const initUser: User = {
-  email: "",
-  password: "",
-  cart: [],
-};
-
 export const UsersDatabaseContextProvider = ({
   children,
 }: {
   children: ReactElement;
 }) => {
-  const [users, setUsers] = useState([initUser]);
   //get all users from local storage
   const data = useGetUsers();
+  //initialize the users state with the value retreived from the database
+  const [users, setUsers] = useState(data);
+
+  // const { updateUser } = useContext(UserContext);
+
+  //add new users to local storage or update an existing user
 
   const UpdateUsersDB = (user: User) => {
-    //add a condition to prevent the addition of the intial user to the users database
-    if (users.every((x) => x.email !== "" && x.password !== "")) {
-      setUsers([...users, user]);
+    const checkUser = useCheckUser(user.email, user.password);
+
+    let allUsers = useGetUsers();
+    if (checkUser !== null) {
+      const { email, password } = checkUser;
+      allUsers = allUsers.filter(
+        (x) => x.email !== email && x.password !== password
+      );
+
+      localStorage.setItem(
+        "UsersDatabase",
+        JSON.stringify([...allUsers, user])
+      );
     } else {
-      setUsers([...data, user]);
+      setUsers([...users, user]);
     }
   };
 

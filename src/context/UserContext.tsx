@@ -1,5 +1,6 @@
 import { ReactElement, createContext, useState } from "react";
-import { Product } from "../Hooks/useProductDetails";
+import { Product } from "./../Hooks/useProducts";
+// import { UsersDatabaseContext } from "./UsersDatabaseContext";
 
 export type User = {
   id?: string;
@@ -37,14 +38,10 @@ export const UserContextProvider = ({
 
   const [user, setUser] = useState(initUser);
 
-  const updateUser = (user: User) => {
-    const id = Math.floor(Math.random() * 100);
-    setUser({
-      id: user.id ?? `id-${id}`,
-      email: user.email,
-      password: user.password,
-      cart: user.cart ?? [],
-    });
+  // const { users } = useContext(UsersDatabaseContext);
+
+  const updateUser = (u: User) => {
+    setUser(u);
   };
   return (
     <UserContext.Provider value={{ user, updateUser }}>

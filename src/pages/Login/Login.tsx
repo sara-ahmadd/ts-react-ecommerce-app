@@ -3,24 +3,38 @@ import Button from "../../components/Button";
 import login from "/login.svg";
 import { ChangeEvent, FormEvent, useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
+import { useCheckUser } from "../../Hooks/useCheckUser";
+import Swal from "sweetalert2";
 const Login = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
-  const { user, updateUser } = useContext(UserContext);
+  const { updateUser } = useContext(UserContext);
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setForm({
       ...form,
       [e.target.id]: e.target.value,
     });
   };
+
+  const checkUser = useCheckUser(form.email, form.password);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(user);
-
-    updateUser(user);
+    if (checkUser === null) {
+      Swal.fire({
+        title: "Warning",
+        text: "The user doesnot exist",
+        icon: "warning",
+        confirmButtonText: "Ok",
+      });
+      navigate("/signUp");
+    } else {
+      updateUser({ ...form, cart: [] });
+      navigate("/");
+    }
   };
 
   return (

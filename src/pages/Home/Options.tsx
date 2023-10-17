@@ -1,22 +1,28 @@
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
-import { useCheckUser } from "../../Hooks/useCheckUser";
+import { CartContext } from "../../context/CartContext";
 
 const Options = () => {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
-  const checkedUser = useCheckUser(user.id ?? "");
-
+  const { user, updateUser } = useContext(UserContext);
+  const { updateCart } = useContext(CartContext);
+  const userLogout = () => {
+    updateUser({ email: "", password: "", cart: [] });
+    updateCart([]);
+  };
   return (
     <div className="flex gap-4 max-w-sm cursor-pointer">
       <button onClick={() => navigate("/login")}>
-        {checkedUser && checkedUser.email
-          ? `Hi, ${user.email.split("@")[0]}`
-          : "Login"}
+        {user && user.email ? `Hi, ${user.email.split("@")[0]}` : "Login"}
       </button>
+      <>
+        {user && user.email ? (
+          <button onClick={userLogout}>Logout</button>
+        ) : null}
+      </>
       <button onClick={() => navigate("/signUp")}>
-        {checkedUser && checkedUser.email ? "" : "Sign Up"}
+        {user && user.email ? "" : "Sign Up"}
       </button>
       <button onClick={() => navigate("/cart")}>Cart</button>
     </div>

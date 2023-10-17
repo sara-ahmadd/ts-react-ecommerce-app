@@ -11,7 +11,7 @@ const Home = () => {
   };
   return (
     <div className="flex flex-col gap-3 justify-center items-center">
-      <Button text="All Products" action={getAllProducts} />
+      <Button text="No Filters" action={getAllProducts} />
       <div className="w-full flex flex-row gap-1 justify-stretch items-start">
         <Categories />
         <ProductsSlider />

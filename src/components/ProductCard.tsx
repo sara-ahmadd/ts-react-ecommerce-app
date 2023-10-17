@@ -3,13 +3,14 @@ import image from "/star.png";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { ModalContext } from "../context/ModalContext";
-type ProductType = {
+type PropsType = {
   imgUrl: string;
   name: string;
   price: number;
   rate: number;
   count: number;
   id: string;
+  action: () => void;
 };
 export const ImageElement = () => (
   <div className="w-5 h-5 p-0">
@@ -17,10 +18,19 @@ export const ImageElement = () => (
   </div>
 );
 
-const ProductCard = ({ imgUrl, name, price, rate, count, id }: ProductType) => {
+const ProductCard = ({
+  imgUrl,
+  name,
+  price,
+  rate,
+  count,
+  id,
+  action,
+}: PropsType) => {
   const stars = new Array<number>(Math.round(rate)).fill(0);
   const navigate = useNavigate();
   const { setModal } = useContext(ModalContext);
+
   return (
     <div className="flex flex-col w-96 border-2 rounded-lg h-full justify-center items-center p-0 pb-5 relative">
       <span className=" bg-red-700 text-white font-semibold p-2 absolute top-0 right-0 rounded-md">
@@ -38,7 +48,7 @@ const ProductCard = ({ imgUrl, name, price, rate, count, id }: ProductType) => {
           <ImageElement key={`${x + index}`} />
         ))}
       </div>
-      <Button action={() => console.log("button clicked")} text="Add to cart" />
+      <Button action={action} text="Add to cart" />
       <Button
         action={() => {
           setModal(true);
