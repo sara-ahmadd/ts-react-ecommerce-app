@@ -45,7 +45,7 @@ const SignUp = () => {
   }, [users, navigate]);
 
   return (
-    <div className="flex flex-row w-full h-max gap-5 items-center p-0">
+    <div className="flex flex-row w-full h-max gap-5 items-center p-0  pt-20">
       <form
         className="flex flex-col justify-start items-start gap-3 border-2 border-gray-200 rounded-md w-2/4 h-fit"
         onSubmit={(e: FormEvent) => {

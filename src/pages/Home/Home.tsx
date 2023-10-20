@@ -1,22 +1,22 @@
 import ProductsSlider from "../../components/ProductsSlider";
 import Categories from "../../components/Categories";
-import Button from "../../components/Button";
-import { useContext } from "react";
-import { CategoryContext } from "../../context/CategoryContext";
+import GridImages from "../../components/GridImages";
+import Intro from "./Intro";
+import Subscribe from "./Subscribe";
 
 const Home = () => {
-  const { setCategory } = useContext(CategoryContext);
-  const getAllProducts = () => {
-    setCategory("");
-  };
   return (
-    <div className="flex flex-col gap-3 justify-center items-center">
-      <Button text="No Filters" action={getAllProducts} />
-      <div className="w-full flex flex-row gap-1 justify-stretch items-start">
-        <Categories />
-        <ProductsSlider />
+    <>
+      <Intro />
+      <div className="flex flex-col gap-3 justify-center items-center pt-10">
+        <div className="w-full flex flex-row gap-1 justify-stretch items-start">
+          <Categories />
+          <ProductsSlider />
+        </div>
+        <GridImages />
+        <Subscribe />
       </div>
-    </div>
+    </>
   );
 };
 

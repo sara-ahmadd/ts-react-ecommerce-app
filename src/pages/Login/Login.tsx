@@ -38,7 +38,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-row w-full h-max gap-5 items-center p-0">
+    <div className="flex flex-row w-full h-max gap-5 items-center p-0  pt-20">
       <div className=" w-2/4 p-0">
         <img src={login} className="w-4/5 h-4/5 p-0 object-cover" />
       </div>

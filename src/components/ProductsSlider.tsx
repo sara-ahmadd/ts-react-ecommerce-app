@@ -76,11 +76,11 @@ const ProductsSlider = () => {
   };
 
   return (
-    <div className="container-box p-0">
+    <div className="container-box p-0" id="container-box">
       <div className="small-container p-0">
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y, EffectFade]}
-          slidesPerView={3}
+          slidesPerView={4}
           spaceBetween={10}
           navigation
         >
@@ -89,15 +89,15 @@ const ProductsSlider = () => {
               return (
                 <SwiperSlide
                   key={`${item.id ?? index}`}
-                  className="w-full flex justify-center h-max items-center pt-0"
+                  className="w-full flex justify-center h-max items-center pt-10"
                 >
                   <ProductCard
-                    imgUrl={item.image}
-                    name={item.title}
-                    price={item.price}
-                    rate={item.rating.rate}
-                    count={item.rating.count}
-                    id={item.id}
+                    imgUrl={item.image ?? ""}
+                    name={item.title ?? ""}
+                    price={item.price ?? 0}
+                    rate={item.rating?.rate ?? 0}
+                    count={item.rating?.count ?? 0}
+                    id={item.id ?? ""}
                     action={() => updateUserCart(user, item)}
                   />
                 </SwiperSlide>
