@@ -5,10 +5,12 @@ import { useGetUser } from "../../Hooks/useGetUser";
 import Button from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import placImg from "/place-img.svg";
+import { UsersDatabaseContext } from "../../context/UsersDatabaseContext";
 
 const Cart = () => {
-  const { user, updateUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { cart, updateCart } = useContext(CartContext);
+  const { UpdateUsersDB } = useContext(UsersDatabaseContext);
   const currUser = useGetUser(user.email, user.password);
   const navigate = useNavigate();
   const getTotalPieces = () => {
@@ -22,21 +24,33 @@ const Cart = () => {
     cart?.forEach((x) => (cost += (x.amount || 0) * (x.price || 0)));
     return cost.toFixed(2);
   };
-  const increment = (title: string) => {
-    const item = cart.find((x) => x.title === title);
-    const newCart = cart.filter((x) => x.title !== title);
-    const newItem = { ...item, amount: (item?.amount || 0) + 1 };
-    updateUser({ ...currUser, cart: [...newCart, newItem] });
-    updateCart([...newCart, newItem]);
-  };
-  const decrement = (title: string) => {
-    const item = cart.find((x) => x.title === title);
-    const newCart = cart.filter((x) => x.title !== title);
-    const newItem = { ...item, amount: (item?.amount || 0) - 1 };
-    updateUser({ ...currUser, cart: [...newCart, newItem] });
-    updateCart([...newCart, newItem]);
-  };
 
+  const managePieces = (title: string, sign: string) => {
+    const item = currUser?.cart?.find((x) => x.title === title);
+    let newItem;
+    if (sign === "+") {
+      newItem = { ...item, amount: (item?.amount || 0) + 1 };
+    } else {
+      newItem = {
+        ...item,
+        amount: (item?.amount || 0) - 1 > 0 ? (item?.amount || 0) - 1 : 1,
+      };
+    }
+    const index = currUser.cart?.indexOf(item ?? {}) || 0;
+    const cartCopy = currUser.cart?.slice() || [];
+    if (index !== -1) {
+      cartCopy[index] = newItem;
+      const updatedUser = { ...currUser, cart: cartCopy };
+      updateCart(cartCopy);
+      UpdateUsersDB(updatedUser);
+    }
+  };
+  const removeItem = (title: string) => {
+    const newCart = currUser.cart?.filter((x) => x.title !== title) || [];
+    const updatedUser = { ...currUser, cart: newCart };
+    updateCart(newCart);
+    UpdateUsersDB(updatedUser);
+  };
   useEffect(() => {
     if (user.email && user.password) {
       updateCart(currUser.cart ?? []);
@@ -53,7 +67,7 @@ const Cart = () => {
           <Button action={() => navigate("/")} text="Home" />
         </div>
       ) : (
-        <div className="flex flex-col justify-center items-start">
+        <div className="flex flex-col justify-center gap-3 items-start">
           <table>
             <thead>
               <tr className=" font-bold text-lg">
@@ -85,20 +99,26 @@ const Cart = () => {
                       <div className="flex w-full justify-between items-center p-0">
                         <button
                           className="w-7 h-7 btn text-white text-center"
-                          onClick={() => increment(x.title ?? "")}
+                          onClick={() => managePieces(x.title ?? "", "+")}
                         >
                           +
                         </button>
                         {x.amount}
                         <button
                           className="w-7 h-7 btn text-white"
-                          onClick={() => decrement(x.title ?? "")}
+                          onClick={() => managePieces(x.title ?? "", "-")}
                         >
                           -
                         </button>
                       </div>
                     </td>
                     <td>{x.price}</td>
+                    <td>
+                      <Button
+                        action={() => removeItem(x.title || "")}
+                        text="Remove"
+                      />
+                    </td>
                   </tr>
                 ))}
             </tbody>
@@ -106,16 +126,16 @@ const Cart = () => {
               <tr className="border-2 border-sky-500 p-0 font-bold text-lg">
                 <td colSpan={3}>
                   <h2 className="p-0">
-                    Total Cost : $
-                    <span className="text-md font-medium">
+                    <span className="p-0">Total Cost : $</span>
+                    <span className="text-md font-medium p-0">
                       {getTotalCost()}
                     </span>
                   </h2>
                 </td>
                 <td colSpan={2}>
                   <h2 className="p-0">
-                    Quantity :
-                    <span className="text-md font-medium">
+                    <span className="p-0">Quantity : </span>
+                    <span className="text-md font-medium p-0">
                       {getTotalPieces()}
                     </span>
                   </h2>
@@ -123,6 +143,13 @@ const Cart = () => {
               </tr>
             </tfoot>
           </table>
+          <Button
+            text="Clear Cart"
+            action={() => {
+              updateCart([]);
+              UpdateUsersDB({ ...currUser, cart: [] });
+            }}
+          />
         </div>
       )}
     </div>
