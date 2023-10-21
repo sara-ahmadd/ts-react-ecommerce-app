@@ -3,7 +3,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import {  useProducts } from "../Hooks/useProducts";
+import { useProducts } from "../Hooks/useProducts";
 import { ReactElement, useContext } from "react";
 import ProductCard from "./ProductCard";
 import {
@@ -14,7 +14,7 @@ import {
   Scrollbar,
 } from "swiper/modules";
 import { CategoryContext } from "../context/CategoryContext";
-import {  UserContext } from "../context/UserContext";
+import { UserContext } from "../context/UserContext";
 // import Swal from "sweetalert2";
 import { UsersDatabaseContext } from "../context/UsersDatabaseContext";
 import { useGetUser } from "../Hooks/useGetUser";
@@ -34,7 +34,7 @@ const ProductsSlider = () => {
       <div className="small-container p-0">
         <Swiper
           modules={[Navigation, Pagination, Scrollbar, A11y, EffectFade]}
-          slidesPerView={4}
+          slidesPerView={3}
           spaceBetween={10}
           navigation
         >

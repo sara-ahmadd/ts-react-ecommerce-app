@@ -25,7 +25,7 @@ const handlePiecesQuantity = (
       updateCart([...cartCopy]);
       updateDB(updatedUser);
     }
-  } else {
+  } else if (sign === "-") {
     if ((item?.amount || 0) - 1 > 0) {
       newItem = {
         ...item,
@@ -35,8 +35,6 @@ const handlePiecesQuantity = (
         cartCopy[index] = newItem;
         const updatedUser = { ...u, cart: cartCopy };
         updateCart([...cartCopy]);
-        console.log(cartCopy);
-
         updateDB(updatedUser);
       }
     } else {

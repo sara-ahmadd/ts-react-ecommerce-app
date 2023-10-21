@@ -2,7 +2,7 @@ import { useProductDetails } from "../Hooks/useProductDetails";
 import { ImageElement } from "./ProductCard";
 import { useNavigate, useParams } from "react-router-dom";
 import placeHolderImg from "/place-img.svg";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ModalContext } from "../context/ModalContext";
 import Increment_Decremetn_Btn from "./Increment_Decremetn_Btn";
 import { CartContext } from "../context/CartContext";
@@ -23,14 +23,25 @@ const ProductDetails = () => {
   const { user, updateUser } = useContext(UserContext);
   const currUser = useGetUser(user.email, user.password);
 
+  useEffect(() => {
+    if (modal === true) {
+      window.scrollTo({ top: 0 });
+      document.body.style.overflow = "hidden";
+    }
+    if (modal === false) {
+      document.body.style.overflow = "scroll";
+      navigate("/");
+    }
+  }, [modal, navigate]);
+
+  const closeModal = () => {
+    handleModal(!modal);
+  };
   return modal ? (
-    <div className="modal flex flex-col justify-center items-start">
+    <div className="modal flex flex-col justify-start items-start pt-20">
       <div className=" md:flex flex-row gap-5 justify-between items-start md:h-96 w-4/5 my-0 mx-auto bg-white rounded-md relative">
         <button
-          onClick={() => {
-            handleModal(false);
-            navigate("/");
-          }}
+          onClick={closeModal}
           className=" bg-red-700 text-white font-semibold p-2 absolute top-0 right-0 rounded-md"
         >
           Close
@@ -57,7 +68,7 @@ const ProductDetails = () => {
               {data ? `$${data.price}` : ""}
             </h2>
           </div>
-          <div className="flex justify-between items-center p-0">
+          <div className="flex justify-between items-center p-0 w-20">
             <Increment_Decremetn_Btn
               sign="+"
               action={() => {

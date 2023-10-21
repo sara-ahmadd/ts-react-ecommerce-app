@@ -1,6 +1,6 @@
 import image from "/star.png";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ModalContext } from "../context/ModalContext";
 import { BsCartPlusFill } from "react-icons/bs";
 import Increment_Decremetn_Btn from "./Increment_Decremetn_Btn";
@@ -11,7 +11,6 @@ import { CartContext } from "../context/CartContext";
 import { UsersDatabaseContext } from "../context/UsersDatabaseContext";
 import managePieces from "../functions/handlePiecesQuantity";
 import trueIcon from "/true-icon.png";
-import { RefreshContext } from "../pages/cart/RefreshContext";
 
 type PropsType = {
   action: () => void;
@@ -25,12 +24,11 @@ export const ImageElement = () => (
 
 const ProductCard = ({ action, item }: PropsType) => {
   const [hover, setHover] = useState(false);
-  const { refresh, setRefresh } = useContext(RefreshContext);
 
   const { updateCart } = useContext(CartContext);
   const { UpdateUsersDB } = useContext(UsersDatabaseContext);
 
-  const { user } = useContext(UserContext);
+  const { user, updateUser } = useContext(UserContext);
   const currUser = useGetUser(user.email, user.password);
   const { image, title, price, rating, id } = item;
   const stars = new Array<number>(Math.round(rating?.rate || 0)).fill(0);
@@ -38,10 +36,12 @@ const ProductCard = ({ action, item }: PropsType) => {
   const { handleModal } = useContext(ModalContext);
   const showDetails = () => {
     handleModal(true);
-    // window.scrollTo({ top: 0 });
     navigate(`/productDetails/${id}`);
   };
-
+  const decrementAmount = (title: string) => {
+    managePieces(title, "-", currUser, updateCart, UpdateUsersDB);
+    updateUser(currUser);
+  };
   return (
     <div
       onMouseOver={() => setHover(true)}
@@ -63,15 +63,17 @@ const ProductCard = ({ action, item }: PropsType) => {
         </div>
       </div>
       <div className="flex gap-3 justify-center items-center w-full p-0 pb-3">
+        <span className="p-0 pr-1">Rating:</span>
         {stars?.map((x, index) => (
           <ImageElement key={`${x + index}`} />
-        ))}
+          ))}
+          <span className="p-0 pr-1">({rating?.rate})</span>
       </div>
       <div className="flex justify-between items-center w-full h-fit p-0">
         <button onClick={action} className="w-1/2 p-1">
           <BsCartPlusFill className=" w-8 h-8 p-0 object-cover text-sky-500 cart_icon" />
         </button>
-        <div className="flex w-full justify-end gap-2 items-center p-0">
+        <div className="flex w-1/2 justify-end gap-2 items-center p-0">
           <div className="flex justify-end gap-1 items-center w-28 h-28 p-0">
             {(currUser?.cart?.find((x) => x.id === item.id)?.amount || 0) >
               0 && <img src={trueIcon} className="w-7 h-7 object-cover p-0" />}
@@ -79,20 +81,12 @@ const ProductCard = ({ action, item }: PropsType) => {
               {currUser?.cart?.find((x) => x.id === item.id)?.amount ?? 0}
             </span>
           </div>
-
-          <Increment_Decremetn_Btn
-            sign="-"
-            action={() => {
-              managePieces(
-                title as string,
-                "-",
-                currUser,
-                updateCart,
-                UpdateUsersDB
-              );
-              setRefresh(!refresh);
-            }}
-          />
+          {hover && (
+            <Increment_Decremetn_Btn
+              sign="-"
+              action={() => decrementAmount(title ?? "")}
+            />
+          )}
         </div>
       </div>
     </div>

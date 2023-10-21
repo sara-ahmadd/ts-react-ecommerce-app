@@ -27,8 +27,6 @@ function Row({ item }: { item: Product }) {
           <Increment_Decremetn_Btn
             sign="+"
             action={() => {
-              console.log(item);
-
               managePieces(
                 item.title ?? "",
                 "+",

@@ -5,7 +5,7 @@ type ModalType = {
   handleModal: (s: boolean) => void;
 };
 
-const ModalCont: ModalType = { modal: false, handleModal: <A,>(s: A) => s };
+const ModalCont: ModalType = { modal: false, handleModal: (m: boolean) => m };
 
 export const ModalContext = createContext(ModalCont);
 export const ModalContextProvider = ({ children }: { children: ReactNode }) => {

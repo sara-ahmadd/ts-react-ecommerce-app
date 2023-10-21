@@ -2,7 +2,7 @@ import ProductsSlider from "../../components/ProductsSlider";
 import Categories from "../../components/Categories";
 import GridImages from "../../components/GridImages";
 import Intro from "./Intro";
-import Disount from "./Subscribe";
+import Disount from "./Discount";
 
 const Home = () => {
   return (
