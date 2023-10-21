@@ -2,7 +2,7 @@ import ProductsSlider from "../../components/ProductsSlider";
 import Categories from "../../components/Categories";
 import GridImages from "../../components/GridImages";
 import Intro from "./Intro";
-import Subscribe from "./Subscribe";
+import Disount from "./Subscribe";
 
 const Home = () => {
   return (
@@ -14,7 +14,7 @@ const Home = () => {
           <ProductsSlider />
         </div>
         <GridImages />
-        <Subscribe />
+        <Disount />
       </div>
     </>
   );

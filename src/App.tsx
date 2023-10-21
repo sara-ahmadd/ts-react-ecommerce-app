@@ -13,6 +13,7 @@ import { UsersDatabaseContextProvider } from "./context/UsersDatabaseContext";
 import SignUp from "./pages/Login/SignUp";
 import { UserContextProvider } from "./context/UserContext";
 import { CartContextProvider } from "./context/CartContext";
+import { RefreshContextProvider } from "./pages/cart/RefreshContext";
 
 function App() {
   const { modal } = useContext(ModalContext);
@@ -22,25 +23,27 @@ function App() {
         <UserContextProvider>
           <UsersDatabaseContextProvider>
             <CartContextProvider>
-              <>
-                {modal === false && <Navbar />}
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="login" element={<Login />} />
-                  <Route path="signUp" element={<SignUp />} />
-                  <Route path="cart" element={<Cart />} />
-                  <Route
-                    path="productDetails/:id"
-                    element={
-                      <>
-                        <Home />
-                        <ProductDetails />
-                      </>
-                    }
-                  />
-                </Routes>
-                {modal === false && <Footer />}
-              </>
+              <RefreshContextProvider>
+                <>
+                  {modal === false && <Navbar />}
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="login" element={<Login />} />
+                    <Route path="signUp" element={<SignUp />} />
+                    <Route path="cart" element={<Cart />} />
+                    <Route
+                      path="productDetails/:id"
+                      element={
+                        <>
+                          <Home />
+                          <ProductDetails />
+                        </>
+                      }
+                    />
+                  </Routes>
+                  {modal === false && <Footer />}
+                </>
+              </RefreshContextProvider>
             </CartContextProvider>
           </UsersDatabaseContextProvider>
         </UserContextProvider>

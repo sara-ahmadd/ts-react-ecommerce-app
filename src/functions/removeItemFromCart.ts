@@ -13,6 +13,6 @@ export const removeItem = (
       (x) => x.title !== title && x !== null && x.id !== undefined
     ) || [];
   const updatedUser = { ...u, cart: newCart };
-  updateCart(newCart);
+  updateCart([...newCart]);
   updateDB(updatedUser);
 };

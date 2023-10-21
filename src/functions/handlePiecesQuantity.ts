@@ -12,16 +12,17 @@ const handlePiecesQuantity = (
   updateDB: UsersContextType["UpdateUsersDB"]
 ) => {
   const item = u?.cart?.find((x) => x.title === title);
-  let newItem;
   const index = u.cart?.indexOf(item ?? {}) || 0;
   const cartCopy = u.cart?.slice() || [];
+
+  let newItem;
 
   if (sign === "+") {
     newItem = { ...item, amount: (item?.amount || 0) + 1 };
     if (index !== -1) {
-      cartCopy[index] = newItem ?? {};
+      cartCopy[index] = newItem;
       const updatedUser = { ...u, cart: cartCopy };
-      updateCart(cartCopy);
+      updateCart([...cartCopy]);
       updateDB(updatedUser);
     }
   } else {
@@ -31,9 +32,11 @@ const handlePiecesQuantity = (
         amount: (item?.amount || 0) - 1,
       };
       if (index !== -1) {
-        cartCopy[index] = newItem ?? {};
+        cartCopy[index] = newItem;
         const updatedUser = { ...u, cart: cartCopy };
-        updateCart(cartCopy);
+        updateCart([...cartCopy]);
+        console.log(cartCopy);
+
         updateDB(updatedUser);
       }
     } else {

@@ -1,6 +1,6 @@
 import image from "/star.png";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ModalContext } from "../context/ModalContext";
 import { BsCartPlusFill } from "react-icons/bs";
 import Increment_Decremetn_Btn from "./Increment_Decremetn_Btn";
@@ -10,6 +10,9 @@ import { UserContext } from "../context/UserContext";
 import { CartContext } from "../context/CartContext";
 import { UsersDatabaseContext } from "../context/UsersDatabaseContext";
 import managePieces from "../functions/handlePiecesQuantity";
+import trueIcon from "/true-icon.png";
+import { RefreshContext } from "../pages/cart/RefreshContext";
+
 type PropsType = {
   action: () => void;
   item: Product;
@@ -21,6 +24,9 @@ export const ImageElement = () => (
 );
 
 const ProductCard = ({ action, item }: PropsType) => {
+  const [hover, setHover] = useState(false);
+  const { refresh, setRefresh } = useContext(RefreshContext);
+
   const { updateCart } = useContext(CartContext);
   const { UpdateUsersDB } = useContext(UsersDatabaseContext);
 
@@ -32,12 +38,16 @@ const ProductCard = ({ action, item }: PropsType) => {
   const { handleModal } = useContext(ModalContext);
   const showDetails = () => {
     handleModal(true);
-    window.scrollTo({ top: 0 });
+    // window.scrollTo({ top: 0 });
     navigate(`/productDetails/${id}`);
   };
 
   return (
-    <div className="flex flex-col w-72 border-2 rounded-lg h-min justify-center items-center p-0 pb-5 px-2 relative card bg-slate-100">
+    <div
+      onMouseOver={() => setHover(true)}
+      onMouseOut={() => setHover(false)}
+      className="flex flex-col w-72 border-2 rounded-lg h-min justify-center items-center p-0 pb-5 px-2 relative card bg-slate-100"
+    >
       <span className=" bg-red-700 text-white font-semibold p-2 absolute top-0 right-0 rounded-md">
         {rating?.count || 0} Pieces
       </span>
@@ -57,23 +67,30 @@ const ProductCard = ({ action, item }: PropsType) => {
           <ImageElement key={`${x + index}`} />
         ))}
       </div>
-      <div className="flex justify-between items-center w-full h-fit">
-        <button onClick={action} className="w-1/2 p-2">
+      <div className="flex justify-between items-center w-full h-fit p-0">
+        <button onClick={action} className="w-1/2 p-1">
           <BsCartPlusFill className=" w-8 h-8 p-0 object-cover text-sky-500 cart_icon" />
         </button>
-        <div className="flex w-full justify-between items-center p-0">
-          <Increment_Decremetn_Btn sign="+" action={action} />
-          {currUser?.cart?.find((x) => x.id === item.id)?.amount ?? 0}
+        <div className="flex w-full justify-end gap-2 items-center p-0">
+          <div className="flex justify-end gap-1 items-center w-28 h-28 p-0">
+            {(currUser?.cart?.find((x) => x.id === item.id)?.amount || 0) >
+              0 && <img src={trueIcon} className="w-7 h-7 object-cover p-0" />}
+            <span className="p-0">
+              {currUser?.cart?.find((x) => x.id === item.id)?.amount ?? 0}
+            </span>
+          </div>
+
           <Increment_Decremetn_Btn
             sign="-"
             action={() => {
               managePieces(
-                item.title ?? "",
+                title as string,
                 "-",
                 currUser,
                 updateCart,
                 UpdateUsersDB
               );
+              setRefresh(!refresh);
             }}
           />
         </div>

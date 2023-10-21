@@ -7,18 +7,25 @@ export const updateUserCart = (
   user: User,
   currentU: User,
   pr: Product,
-  get_saved_cart: (currentU: User) => Product[],
-  check_product: (p: Product, arr: Product[]) => Product | null,
   update_user: UsersContextType["UpdateUsersDB"],
   update_DB: UsersContextType["UpdateUsersDB"]
 ) => {
+  //get the saved cart of the current user from local storage
+  const getSavedCart = (u: User) => {
+    return u.cart ?? [];
+  };
+  const checkProduct = (p: Product, arr: Product[]) => {
+    const prod = arr.find((x) => x.id === p.id);
+    return prod ? prod : null;
+  };
+
   if (user.email && user.password) {
     if (user.cart !== undefined) {
       //get the cart of the current user, then check if the clicked product is already in the cart.
-      let retreivedCart: Product[] = get_saved_cart(currentU);
-      const checkedProduct = check_product(pr, retreivedCart);
+      let retreivedCart: Product[] = getSavedCart(currentU);
+      const checkedProduct = checkProduct(pr, retreivedCart);
       //if the product is found in the cart
-      if (check_product !== null) {
+      if (checkProduct !== null) {
         //delete the product from the cart, then update the amount in the found product
         retreivedCart = retreivedCart.filter((x) => x.id !== pr.id);
         const quantity = checkedProduct?.amount ?? 0;

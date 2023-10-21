@@ -10,6 +10,7 @@ import { UsersDatabaseContext } from "../context/UsersDatabaseContext";
 import { UserContext } from "../context/UserContext";
 import { useGetUser } from "../Hooks/useGetUser";
 import managePieces from "../functions/handlePiecesQuantity";
+import { updateUserCart } from "../functions/updateUserCart";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const { updateCart } = useContext(CartContext);
   const { UpdateUsersDB } = useContext(UsersDatabaseContext);
-  const { user } = useContext(UserContext);
+  const { user, updateUser } = useContext(UserContext);
   const currUser = useGetUser(user.email, user.password);
 
   return modal ? (
@@ -60,18 +61,14 @@ const ProductDetails = () => {
             <Increment_Decremetn_Btn
               sign="+"
               action={() => {
-                console.log(
-                  currUser?.cart?.find(
-                    (x) => x?.title === data?.title || undefined
-                  )?.amount ?? 0
-                );
-                managePieces(
-                  data?.title ?? "",
-                  "+",
-                  currUser,
-                  updateCart,
-                  UpdateUsersDB
-                );
+                data &&
+                  updateUserCart(
+                    user,
+                    currUser,
+                    data,
+                    updateUser,
+                    UpdateUsersDB
+                  );
               }}
             />
             {currUser?.cart?.find((x) => x?.title === data?.title || undefined)
