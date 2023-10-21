@@ -5,12 +5,12 @@ import { useCheckUser } from "../Hooks/useCheckUser";
 
 export type Users = User[];
 
-export interface UserContextType {
+export interface UsersContextType {
   users: User[];
   UpdateUsersDB: (u: User) => void;
 }
 
-const InitUsersState: UserContextType = {
+const InitUsersState: UsersContextType = {
   users: [
     {
       email: "",

@@ -3,10 +3,10 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Cart from "./pages/cart/Cart";
-import { CategoryContext } from "./context/CategoryContext";
-import { useState } from "react";
+import { CategoryContextProvider } from "./context/CategoryContext";
+import { useContext } from "react";
 import Navbar from "./pages/Home/Navbar";
-import { ModalContext } from "./context/ModalContext";
+import { ModalContext, ModalContextProvider } from "./context/ModalContext";
 import ProductDetails from "./components/ProductDetails";
 import Footer from "./components/Footer";
 import { UsersDatabaseContextProvider } from "./context/UsersDatabaseContext";
@@ -15,12 +15,10 @@ import { UserContextProvider } from "./context/UserContext";
 import { CartContextProvider } from "./context/CartContext";
 
 function App() {
-  const [category, setCategory] = useState("");
-  const [modal, setModal] = useState(false);
-
+  const { modal } = useContext(ModalContext);
   return (
-    <CategoryContext.Provider value={{ category, setCategory }}>
-      <ModalContext.Provider value={{ modal, setModal }}>
+    <CategoryContextProvider>
+      <ModalContextProvider>
         <UserContextProvider>
           <UsersDatabaseContextProvider>
             <CartContextProvider>
@@ -46,8 +44,8 @@ function App() {
             </CartContextProvider>
           </UsersDatabaseContextProvider>
         </UserContextProvider>
-      </ModalContext.Provider>
-    </CategoryContext.Provider>
+      </ModalContextProvider>
+    </CategoryContextProvider>
   );
 }
 

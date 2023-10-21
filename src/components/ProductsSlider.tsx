@@ -26,13 +26,11 @@ const ProductsSlider = () => {
   const { user, updateUser } = useContext(UserContext);
   const { UpdateUsersDB } = useContext(UsersDatabaseContext);
 
+  const currUser = useGetUser(user.email, user.password);
   //get the saved cart of the current user from local storage
   const getSavedCart = (currentU: User) => {
     return currentU.cart ?? [];
   };
-
-  const currUser = useGetUser(user.email, user.password);
-
   const checkProduct = (p: Product, arr: Product[]) => {
     const prod = arr.find((x) => x.id === p.id);
     return prod ? prod : null;
@@ -47,7 +45,7 @@ const ProductsSlider = () => {
         //if the product is found in the cart
         if (checkProduct !== null) {
           //delete the product from the cart, then update the amount in the found product
-          retreivedCart = retreivedCart.filter((x) => x.id !== pr.id);
+          retreivedCart = retreivedCart.filter((x) => x.id && x.id !== pr.id);
           const quantity = checkedProduct?.amount ?? 0;
 
           //add the updated product to the cart
@@ -92,12 +90,7 @@ const ProductsSlider = () => {
                   className="w-full flex justify-center h-max items-center pt-10"
                 >
                   <ProductCard
-                    imgUrl={item.image ?? ""}
-                    name={item.title ?? ""}
-                    price={item.price ?? 0}
-                    rate={item.rating?.rate ?? 0}
-                    count={item.rating?.count ?? 0}
-                    id={item.id ?? ""}
+                    item={item}
                     action={() => updateUserCart(user, item)}
                   />
                 </SwiperSlide>

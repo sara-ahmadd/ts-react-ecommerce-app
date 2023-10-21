@@ -7,9 +7,9 @@ import Button from "./Button";
 
 const Categories = () => {
   const { categories }: { categories: string[] } = useCategories();
-  const { setCategory } = useContext(CategoryContext);
+  const { handleCategory } = useContext(CategoryContext);
   const getAllProducts = () => {
-    setCategory("");
+    handleCategory("");
   };
   return (
     <div className="flex flex-col gap-4 justify-center items-stretch p-0 w-52">

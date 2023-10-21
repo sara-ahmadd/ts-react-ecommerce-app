@@ -19,11 +19,12 @@ const Options = () => {
 
   const getTotalProductsCount = (c: Product[]) => {
     let sum = 0;
-    c.forEach((x) => {
-      if (x.amount) {
+    c?.forEach((x) => {
+      if (x?.amount) {
         sum += x.amount ?? 0;
       }
     });
+
     return sum;
   };
   const totalCount = getTotalProductsCount(cart ?? []);

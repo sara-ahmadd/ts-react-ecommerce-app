@@ -3,9 +3,9 @@ import Button from "./Button";
 import { CategoryContext } from "../context/CategoryContext";
 
 const Category = ({ title }: { title: string }) => {
-  const { setCategory } = useContext(CategoryContext);
+  const { handleCategory } = useContext(CategoryContext);
   const handleClick = () => {
-    setCategory(`/category/${title}`);
+    handleCategory(`/category/${title}`);
   };
 
   return <Button text={title.toUpperCase()} action={handleClick} />;

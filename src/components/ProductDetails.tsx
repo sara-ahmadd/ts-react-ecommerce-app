@@ -4,21 +4,30 @@ import { useNavigate, useParams } from "react-router-dom";
 import placeHolderImg from "/place-img.svg";
 import { useContext } from "react";
 import { ModalContext } from "../context/ModalContext";
+import Increment_Decremetn_Btn from "./Increment_Decremetn_Btn";
+import { CartContext } from "../context/CartContext";
+import { UsersDatabaseContext } from "../context/UsersDatabaseContext";
+import { UserContext } from "../context/UserContext";
+import { useGetUser } from "../Hooks/useGetUser";
+import managePieces from "../functions/handlePiecesQuantity";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { data } = useProductDetails(id ?? "");
-
-  const { modal, setModal } = useContext(ModalContext);
+  const { modal, handleModal } = useContext(ModalContext);
   const stars = new Array<number>(Math.round(data?.rating?.rate ?? 0)).fill(0);
   const navigate = useNavigate();
+  const { updateCart } = useContext(CartContext);
+  const { UpdateUsersDB } = useContext(UsersDatabaseContext);
+  const { user } = useContext(UserContext);
+  const currUser = useGetUser(user.email, user.password);
 
   return modal ? (
-    <div className="modal">
+    <div className="modal flex flex-col justify-center items-start">
       <div className=" md:flex flex-row gap-5 justify-between items-start md:h-96 w-4/5 my-0 mx-auto bg-white rounded-md relative">
         <button
           onClick={() => {
-            setModal(false);
+            handleModal(false);
             navigate("/");
           }}
           className=" bg-red-700 text-white font-semibold p-2 absolute top-0 right-0 rounded-md"
@@ -46,6 +55,39 @@ const ProductDetails = () => {
             <h2 className="text-2xl font-bold p-0">
               {data ? `$${data.price}` : ""}
             </h2>
+          </div>
+          <div className="flex justify-between items-center p-0">
+            <Increment_Decremetn_Btn
+              sign="+"
+              action={() => {
+                console.log(
+                  currUser?.cart?.find(
+                    (x) => x?.title === data?.title || undefined
+                  )?.amount ?? 0
+                );
+                managePieces(
+                  data?.title ?? "",
+                  "+",
+                  currUser,
+                  updateCart,
+                  UpdateUsersDB
+                );
+              }}
+            />
+            {currUser?.cart?.find((x) => x?.title === data?.title || undefined)
+              ?.amount ?? 0}
+            <Increment_Decremetn_Btn
+              sign="-"
+              action={() => {
+                managePieces(
+                  data?.title ?? "",
+                  "-",
+                  currUser,
+                  updateCart,
+                  UpdateUsersDB
+                );
+              }}
+            />
           </div>
         </div>
       </div>

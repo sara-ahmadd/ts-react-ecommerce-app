@@ -5,7 +5,7 @@ import { UserContext } from "./UserContext";
 
 export type CartType = Product[];
 
-type CartContextType = {
+export type CartContextType = {
   cart: Product[];
   updateCart: (c: CartType) => void;
 };
